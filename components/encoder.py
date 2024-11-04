@@ -7,7 +7,7 @@ from utils.positional import PositionalEncoding
 __all__ = ['OriginalTransformerEncoderLayer', 'OriginalTransformerEncoder']
 
 class OriginalTransformerEncoderLayer(nn.Module):
-    def __init__(self, embed_dim: int, num_heads: int = 8, *args, **kwargs) -> None:
+    def __init__(self, embed_dim: int, num_heads: int = 8, dropout: float = 0.1, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.self_attn = MultiHeadAttention(embed_dim=embed_dim, num_heads=num_heads)
         self.fc = nn.Sequential(
@@ -17,6 +17,7 @@ class OriginalTransformerEncoderLayer(nn.Module):
         )
         self.layer_norm1 = nn.LayerNorm(embed_dim)
         self.layer_norm2 = nn.LayerNorm(embed_dim)
+        self.dropout = nn.Dropout(dropout)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         original_x = x.clone()
